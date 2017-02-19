@@ -3,13 +3,17 @@ package com.ipshita.androidprojects.popularmovies;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.ipshita.androidprojects.popularmovies.models.Movie;
+import com.ipshita.androidprojects.popularmovies.utilities.MovieJsonUtils;
 import com.ipshita.androidprojects.popularmovies.utilities.NetworkUtils;
 import com.ipshita.androidprojects.popularmovies.utilities.SortBy;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 /**
  * This class shows movies in a grid layout and arranges them in the order of most popular or top rated.
@@ -18,6 +22,7 @@ import java.net.URL;
  */
 public class MovieGridActivity extends AppCompatActivity {
 
+    private static final String TAG = MovieGridActivity.class.getSimpleName();
     // TODO: 17-02-2017 remove the textview after adding list
     private TextView temporaryMovieDataTextView;
 
@@ -38,11 +43,11 @@ public class MovieGridActivity extends AppCompatActivity {
     }
 
     // TODO: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
-    public class FetchMovieTask extends AsyncTask<SortBy, Void, String> {
+    public class FetchMovieTask extends AsyncTask<SortBy, Void, List<Movie>> {
 
 
         @Override
-        protected String doInBackground(SortBy... sortBies) {
+        protected List<Movie> doInBackground(SortBy... sortBies) {
             // if there is no sortBy preference then the movies can't be looked up
             if (sortBies.length == 0) {
                 return null;
@@ -58,16 +63,26 @@ public class MovieGridActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            //String[] moviesData = MovieJsonUtils.getSimpleMovieStringsFromJson(MovieGridActivity.this, moviesJSONResponse);
+            List<Movie> movieList = MovieJsonUtils.getMoviesFromJson(moviesJSONResponse);
 
-            return moviesJSONResponse;
+            return movieList;
 
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            temporaryMovieDataTextView.setText(s);
+        protected void onPostExecute(List<Movie> movies) {
+            super.onPostExecute(movies);
+            if (movies == null) {
+                Log.v(TAG, "movie list is null");
+            } else if (movies.isEmpty()) {
+                Log.v(TAG, "movie list is empty");
+
+            } else {
+
+                for (int i = 0; i < movies.size(); i++) {
+                    temporaryMovieDataTextView.append(movies.get(i).getTitle() + "\n\n");
+                }
+            }
         }
     }
 
