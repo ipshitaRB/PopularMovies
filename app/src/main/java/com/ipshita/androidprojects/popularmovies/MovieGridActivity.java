@@ -1,11 +1,13 @@
 package com.ipshita.androidprojects.popularmovies;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.GridView;
 
+import com.ipshita.androidprojects.popularmovies.adapters.MovieThumbnailAdapter;
 import com.ipshita.androidprojects.popularmovies.models.Movie;
 import com.ipshita.androidprojects.popularmovies.utilities.MovieJsonUtils;
 import com.ipshita.androidprojects.popularmovies.utilities.NetworkUtils;
@@ -24,16 +26,25 @@ public class MovieGridActivity extends AppCompatActivity {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
     // TODO: 17-02-2017 remove the textview after adding list
-    private TextView temporaryMovieDataTextView;
+    //private TextView temporaryMovieDataTextView;
+
+    private GridView movieGridView;
+
+    private List<Movie> movieList;
+
+    private MovieThumbnailAdapter movieAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_grid);
 
-        temporaryMovieDataTextView = (TextView) findViewById(R.id.tv_movie_data);
+        //temporaryMovieDataTextView = (TextView) findViewById(R.id.tv_movie_data);
+
+        movieGridView = (GridView) findViewById(R.id.movie_grid_view);
 
         loadMovieData();
+
 
     }
 
@@ -63,9 +74,8 @@ public class MovieGridActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            List<Movie> movieList = MovieJsonUtils.getMoviesFromJson(moviesJSONResponse);
 
-            return movieList;
+            return MovieJsonUtils.getMoviesFromJson(moviesJSONResponse);
 
         }
 
@@ -78,10 +88,11 @@ public class MovieGridActivity extends AppCompatActivity {
                 Log.v(TAG, "movie list is empty");
 
             } else {
-
-                for (int i = 0; i < movies.size(); i++) {
-                    temporaryMovieDataTextView.append(movies.get(i).getTitle() + "\n\n");
-                }
+                Context context = getApplicationContext();
+                int resourceId = 0;
+                movieList = movies;
+                movieAdapter = new MovieThumbnailAdapter(context, resourceId, movieList);
+                movieGridView.setAdapter(movieAdapter);
             }
         }
     }

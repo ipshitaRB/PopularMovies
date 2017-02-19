@@ -7,13 +7,19 @@
     android:padding="@dimen/frame_layout_padding">
 
     <!-- TODO remove textview later -->
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_movie_data"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content" />-->
 
     <GridView
         android:id="@+id/movie_grid_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:columnWidth="90dp"
+        android:gravity="center"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 </FrameLayout>
