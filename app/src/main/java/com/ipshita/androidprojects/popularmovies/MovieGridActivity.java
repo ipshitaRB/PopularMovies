@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Spinner;
 
 import com.ipshita.androidprojects.popularmovies.adapters.MovieThumbnailAdapter;
 import com.ipshita.androidprojects.popularmovies.models.Movie;
@@ -18,6 +19,7 @@ import com.ipshita.androidprojects.popularmovies.utilities.SortBy;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +40,9 @@ public class MovieGridActivity extends AppCompatActivity {
 
     private MovieThumbnailAdapter movieAdapter;
 
+    private Spinner sortBySpinner;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +52,52 @@ public class MovieGridActivity extends AppCompatActivity {
 
         movieGridView = (GridView) findViewById(R.id.movie_grid_view);
 
-        loadMovieData();
+        final Context context = getApplicationContext();
+        int resourceId = 0;
+        movieList = new ArrayList<>();
+        movieAdapter = new MovieThumbnailAdapter(context, resourceId, movieList);
+        movieGridView.setAdapter(movieAdapter);
+        movieGridView.setNumColumns(2);
+        movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+                Movie clickedMovie = movieAdapter.getItem(position);
+                Intent intentToStartMovieDetailActivity = new Intent(context, MovieDetailActivity.class);
+                intentToStartMovieDetailActivity.putExtra(getString(R.string.movie_object_key), clickedMovie);
+                startActivity(intentToStartMovieDetailActivity);
+            }
+        });
+
+        sortBySpinner = (Spinner) findViewById(R.id.spinner_sort_by);
+
+        loadMovieData(SortBy.POPULARITY);
+
+        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (sortBySpinner.getSelectedItemPosition() == 0) {
+                    loadMovieData(SortBy.POPULARITY);
+                } else {
+                    loadMovieData(SortBy.RATING);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        
+
+
 
 
     }
 
-    private void loadMovieData() {
+
+    private void loadMovieData(SortBy sortPreference) {
         // completed: 17-02-2017 call FetchMovieTask.execute()
-        new FetchMovieTask().execute(SortBy.RATING);
+        new FetchMovieTask().execute(sortPreference);
     }
 
     // TODO: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
@@ -83,40 +126,38 @@ public class MovieGridActivity extends AppCompatActivity {
 
         }
 
+        // TODO: 17-02-2017 check internet connection
+// TODO: 17-02-2017 show progressbar in case intenet is slow
         @Override
         protected void onPostExecute(List<Movie> movies) {
             super.onPostExecute(movies);
             if (movies == null) {
                 Log.v(TAG, "movie list is null");
+                // TODO: 19-02-2017 no result found
             } else if (movies.isEmpty()) {
                 Log.v(TAG, "movie list is empty");
-
+                // TODO: 19-02-2017 no result found
             } else {
-                final Context context = getApplicationContext();
-                int resourceId = 0;
-                movieList = movies;
-                movieAdapter = new MovieThumbnailAdapter(context, resourceId, movieList);
-                movieGridView.setAdapter(movieAdapter);
-                movieGridView.setNumColumns(2);
-                movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> parent, View v,
-                                            int position, long id) {
-                        Movie clickedMovie = movieAdapter.getItem(position);
-                        Intent intentToStartMovieDetailActivity = new Intent(context, MovieDetailActivity.class);
-                        intentToStartMovieDetailActivity.putExtra(getString(R.string.movie_object_key), clickedMovie);
-                        startActivity(intentToStartMovieDetailActivity);
+                movieList.clear();
+                movieList.addAll(movies);
+                movieAdapter.addAll(movieList);
+
+
+                // TODO: 19-02-2017 do something about the new itemclicklisteners every time data is loaded :|
+               /* sortBySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Toast.makeText(MovieGridActivity.this, String.valueOf(sortBySpinner.getSelectedItemPosition()),Toast.LENGTH_LONG).show();
                     }
-                });
+                });*/
             }
         }
+
+
     }
 
 
-    // TODO: 17-02-2017 check internet connection
     // completed: 17-02-2017 in doinbackground append it to the textview
-
-    // TODO: 17-02-2017 show progressbar in case intenet is slow
-    
 
 
 }

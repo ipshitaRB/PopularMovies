@@ -58,6 +58,9 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
                 Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"
                         + movie.getPosterPath()).into(imageView);
             //imageView.setImageResource(movieList.);
+
+            // TODO: 19-02-2017 build url and use 
+            // TODO: 19-02-2017 handle when no poster path given 
         }
         return imageView;
     }

@@ -38,6 +38,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         if (intentThatCalledThisActivity.hasExtra(getString(R.string.movie_object_key))) {
             Movie clickedMovie = intentThatCalledThisActivity.getParcelableExtra(getString(R.string.movie_object_key));
             if (null != clickedMovie.getPosterPath() && !clickedMovie.getPosterPath().isEmpty())
+
+                // TODO: 19-02-2017 build url and use
+                // TODO: 19-02-2017 handle when no poster path given
                 Picasso.with(context).load("http://image.tmdb.org/t/p/original/"
                         + clickedMovie.getPosterPath()).into(posterImageView);
             titleTextView.setText(clickedMovie.getTitle());

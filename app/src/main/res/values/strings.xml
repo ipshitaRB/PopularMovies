@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="movie_object_key">movie key</string>
+    <string name="sort_by_popularity">Most popular movies</string>
+    <string-array name="sort_by_array">
+        <item>Most Popular</item>
+        <item>Top Rated</item>
+    </string-array>
+    <string name="sort_prompt">Sort :</string>
 </resources>
