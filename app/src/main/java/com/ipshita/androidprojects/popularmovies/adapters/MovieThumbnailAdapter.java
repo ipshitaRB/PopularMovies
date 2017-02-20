@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ipshita.androidprojects.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
@@ -45,9 +46,9 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(450, 450));
+            imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(4, 4, 4, 0);
 
         } else {
             imageView = (ImageView) convertView;
@@ -57,6 +58,11 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
             if (null != movie.getPosterPath() && !movie.getPosterPath().isEmpty())
                 Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"
                         + movie.getPosterPath()).into(imageView);
+
+            else {
+                TextView movieNameTextView = (TextView) convertView;
+                movieNameTextView.setText(movie.getTitle());
+            }
             //imageView.setImageResource(movieList.);
 
             // TODO: 19-02-2017 build url and use 

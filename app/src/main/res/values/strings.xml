@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="movie_object_key">movie key</string>
-    <string name="sort_by_popularity">Most popular movies</string>
-    <string-array name="sort_by_array">
-        <item>Most Popular</item>
-        <item>Top Rated</item>
-    </string-array>
+    <string name="sort_by_popularity">Most popular</string>
+    <string name="sort_by_rating">Top Rated</string>
     <string name="sort_prompt">Sort :</string>
     <string name="no_internet">Unable to list movies. Please check internet connection and try again !</string>
     <string name="no_result_found">Sorry, no result found.</string>
+    <string name="movie_parcel_key">movie parcel key</string>
+    <string name="sorted_key">existing sort order</string>
 </resources>

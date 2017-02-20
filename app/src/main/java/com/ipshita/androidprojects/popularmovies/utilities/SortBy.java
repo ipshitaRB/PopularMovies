@@ -18,8 +18,21 @@ public enum SortBy {
         this.value = value;
     }
 
+    public static SortBy whichSortBy(String value) {
+        if (value.equals(POPULARITY.getValue()))
+            return POPULARITY;
+        else if (value.equals(RATING.getValue()))
+            return RATING;
+        else
+            return null;
+    }
+
     @Override
     public String toString() {
         return this.value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

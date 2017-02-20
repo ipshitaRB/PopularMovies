@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -37,11 +39,13 @@ public class MovieGridActivity extends AppCompatActivity {
 
     private GridView movieGridView;
 
-    private List<Movie> movieList;
+    private ArrayList<Movie> movieList;
 
     private MovieThumbnailAdapter movieAdapter;
 
     private Spinner sortBySpinner;
+
+    private SortBy currentSortType = SortBy.POPULARITY;
 
 
     @Override
@@ -56,6 +60,21 @@ public class MovieGridActivity extends AppCompatActivity {
         final Context context = getApplicationContext();
         int resourceId = 0;
         movieList = new ArrayList<>();
+
+        if (savedInstanceState == null ||
+                !savedInstanceState.containsKey(getString(R.string.movie_parcel_key))
+                || !savedInstanceState.containsKey(getString(R.string.sorted_key))) {
+            movieList.clear();
+            if (NetworkUtils.isNetworkAvailable(context)) {
+
+                loadMovieData(currentSortType);
+            } else {
+                Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            movieList = savedInstanceState.getParcelableArrayList(getString(R.string.movie_parcel_key));
+            currentSortType = SortBy.whichSortBy(savedInstanceState.getString(getString(R.string.sorted_key)));
+        }
         movieAdapter = new MovieThumbnailAdapter(context, resourceId, movieList);
         movieGridView.setAdapter(movieAdapter);
         movieGridView.setNumColumns(2);
@@ -70,12 +89,7 @@ public class MovieGridActivity extends AppCompatActivity {
         });
 
 
-        if (NetworkUtils.isNetworkAvailable(context)) {
 
-            loadMovieData(SortBy.POPULARITY);
-        } else {
-            Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
-        }
 
         /*sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -109,6 +123,46 @@ public class MovieGridActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(getString(R.string.movie_parcel_key), movieList);
+        outState.putString(getString(R.string.sorted_key), currentSortType.getValue());
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.sort_by_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Context context = MovieGridActivity.this;
+        int itemClickedId = item.getItemId();
+        if (itemClickedId == R.id.action_sort_by_popularity) {
+            if (NetworkUtils.isNetworkAvailable(context)) {
+
+                loadMovieData(SortBy.POPULARITY);
+                currentSortType = SortBy.POPULARITY;
+            } else {
+                Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (itemClickedId == R.id.action_sort_by_rating) {
+            if (NetworkUtils.isNetworkAvailable(context)) {
+
+                loadMovieData(SortBy.RATING);
+                currentSortType = SortBy.RATING;
+            } else {
+                Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private void loadMovieData(SortBy sortPreference) {
         // completed: 17-02-2017 call FetchMovieTask.execute()
