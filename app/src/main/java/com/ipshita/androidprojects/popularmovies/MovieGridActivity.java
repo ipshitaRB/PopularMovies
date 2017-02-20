@@ -1,10 +1,13 @@
 package com.ipshita.androidprojects.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.ipshita.androidprojects.popularmovies.adapters.MovieThumbnailAdapter;
@@ -25,6 +28,7 @@ import java.util.List;
 public class MovieGridActivity extends AppCompatActivity {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
+
     // TODO: 17-02-2017 remove the textview after adding list
     //private TextView temporaryMovieDataTextView;
 
@@ -50,7 +54,7 @@ public class MovieGridActivity extends AppCompatActivity {
 
     private void loadMovieData() {
         // completed: 17-02-2017 call FetchMovieTask.execute()
-        new FetchMovieTask().execute(SortBy.POPULARITY);
+        new FetchMovieTask().execute(SortBy.RATING);
     }
 
     // TODO: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
@@ -88,11 +92,21 @@ public class MovieGridActivity extends AppCompatActivity {
                 Log.v(TAG, "movie list is empty");
 
             } else {
-                Context context = getApplicationContext();
+                final Context context = getApplicationContext();
                 int resourceId = 0;
                 movieList = movies;
                 movieAdapter = new MovieThumbnailAdapter(context, resourceId, movieList);
                 movieGridView.setAdapter(movieAdapter);
+                movieGridView.setNumColumns(2);
+                movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v,
+                                            int position, long id) {
+                        Movie clickedMovie = movieAdapter.getItem(position);
+                        Intent intentToStartMovieDetailActivity = new Intent(context, MovieDetailActivity.class);
+                        intentToStartMovieDetailActivity.putExtra(getString(R.string.movie_object_key), clickedMovie);
+                        startActivity(intentToStartMovieDetailActivity);
+                    }
+                });
             }
         }
     }
