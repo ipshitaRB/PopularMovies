@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ipshita.androidprojects.popularmovies.adapters.MovieThumbnailAdapter;
 import com.ipshita.androidprojects.popularmovies.models.Movie;
@@ -31,8 +33,7 @@ public class MovieGridActivity extends AppCompatActivity {
 
     private static final String TAG = MovieGridActivity.class.getSimpleName();
 
-    // TODO: 17-02-2017 remove the textview after adding list
-    //private TextView temporaryMovieDataTextView;
+    private ProgressBar loadMoviesProgressBar;
 
     private GridView movieGridView;
 
@@ -48,7 +49,7 @@ public class MovieGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_grid);
 
-        //temporaryMovieDataTextView = (TextView) findViewById(R.id.tv_movie_data);
+        loadMoviesProgressBar = (ProgressBar) findViewById(R.id.pb_load_movie);
 
         movieGridView = (GridView) findViewById(R.id.movie_grid_view);
 
@@ -68,17 +69,31 @@ public class MovieGridActivity extends AppCompatActivity {
             }
         });
 
-        sortBySpinner = (Spinner) findViewById(R.id.spinner_sort_by);
 
-        loadMovieData(SortBy.POPULARITY);
+        if (NetworkUtils.isNetworkAvailable(context)) {
 
-        sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            loadMovieData(SortBy.POPULARITY);
+        } else {
+            Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+        }
+
+        /*sortBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (sortBySpinner.getSelectedItemPosition() == 0) {
-                    loadMovieData(SortBy.POPULARITY);
+                    if (NetworkUtils.isNetworkAvailable(context)) {
+
+                        loadMovieData(SortBy.POPULARITY);
+                    } else {
+                        Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    loadMovieData(SortBy.RATING);
+                    if (NetworkUtils.isNetworkAvailable(context)) {
+
+                        loadMovieData(SortBy.RATING);
+                    } else {
+                        Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -86,7 +101,7 @@ public class MovieGridActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });
+        });*/
         
 
 
@@ -102,7 +117,11 @@ public class MovieGridActivity extends AppCompatActivity {
 
     // TODO: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
     public class FetchMovieTask extends AsyncTask<SortBy, Void, List<Movie>> {
-
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            loadMoviesProgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected List<Movie> doInBackground(SortBy... sortBies) {
@@ -131,25 +150,23 @@ public class MovieGridActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Movie> movies) {
             super.onPostExecute(movies);
+            loadMoviesProgressBar.setVisibility(View.INVISIBLE);
             if (movies == null) {
                 Log.v(TAG, "movie list is null");
-                // TODO: 19-02-2017 no result found
+                // completed: 19-02-2017 no result found
+                Toast.makeText(MovieGridActivity.this, getString(R.string.no_result_found), Toast.LENGTH_LONG).show();
             } else if (movies.isEmpty()) {
                 Log.v(TAG, "movie list is empty");
-                // TODO: 19-02-2017 no result found
+                Toast.makeText(MovieGridActivity.this, getString(R.string.no_result_found), Toast.LENGTH_LONG).show();
+                // completed: 19-02-2017 no result found
             } else {
                 movieList.clear();
                 movieList.addAll(movies);
                 movieAdapter.addAll(movieList);
 
 
-                // TODO: 19-02-2017 do something about the new itemclicklisteners every time data is loaded :|
-               /* sortBySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(MovieGridActivity.this, String.valueOf(sortBySpinner.getSelectedItemPosition()),Toast.LENGTH_LONG).show();
-                    }
-                });*/
+                // completed: 19-02-2017 do something about the new itemclicklisteners every time data is loaded :|
+
             }
         }
 

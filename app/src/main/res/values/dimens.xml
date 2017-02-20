@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="frame_layout_padding">16dp</dimen>
+    <dimen name="progressbar_dimen">40dp</dimen>
 </resources>

@@ -7,20 +7,16 @@
     android:background="@color/colorSecondary"
     android:padding="@dimen/frame_layout_padding">
 
-    <Spinner
-        android:id="@+id/spinner_sort_by"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorAccent"
-        android:entries="@array/sort_by_array"
-        android:prompt="@string/sort_prompt" />
 
+    <ProgressBar
+        android:id="@+id/pb_load_movie"
+        android:layout_width="@dimen/progressbar_dimen"
+        android:layout_height="@dimen/progressbar_dimen"
+        android:visibility="invisible" />
     <GridView
         android:id="@+id/movie_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spinner_sort_by"
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"

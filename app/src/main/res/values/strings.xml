@@ -7,4 +7,6 @@
         <item>Top Rated</item>
     </string-array>
     <string name="sort_prompt">Sort :</string>
+    <string name="no_internet">Unable to list movies. Please check internet connection and try again !</string>
+    <string name="no_result_found">Sorry, no result found.</string>
 </resources>
