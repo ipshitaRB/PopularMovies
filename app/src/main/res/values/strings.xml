@@ -15,4 +15,5 @@
     <string name="no_synopsis_found">No overview found</string>
     <string name="no_rating_found">No rating found</string>
     <string name="no_release_date_found">No release date found</string>
+    <string name="no_poster_image_found">No poster image found</string>
 </resources>

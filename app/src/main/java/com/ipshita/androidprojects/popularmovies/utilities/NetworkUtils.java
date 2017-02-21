@@ -28,6 +28,7 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
     private static final String MOVIE_URL =
             "https://api.themoviedb.org/3/discover/movie";
+    private static final String PICASSO_URL = "http://image.tmdb.org/t/p/";
 
 
     /**
@@ -55,6 +56,27 @@ public final class NetworkUtils {
 
         return url;
     }
+
+    // TODO: 20-02-2017 build picasso url 
+/*
+    public static String buildPicassoURL(ImageSize size, String posterPath) {
+        Uri builtUri = Uri.parse(MOVIE_URL).buildUpon()
+                .appendPath(size.getValue())
+                .appendPath(posterPath)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built URI " + url);
+
+
+        return url.toString();
+    }*/
 
     /**
      * This method returns the entire result from the HTTP response.

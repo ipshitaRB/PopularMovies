@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.ipshita.androidprojects.popularmovies.R;
 import com.ipshita.androidprojects.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -63,13 +63,12 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
                         + movie.getPosterPath()).into(imageView);
 
             else {
-                TextView movieNameTextView = (TextView) convertView;
-                movieNameTextView.setText(movie.getTitle());
+                imageView.setContentDescription(getContext().getString(R.string.no_poster_image_found));
             }
             //imageView.setImageResource(movieList.);
 
-            // TODO: 19-02-2017 build url and use 
-            // TODO: 19-02-2017 handle when no poster path given 
+            // TODO: 19-02-2017 build url and use
+            // TODO: 19-02-2017 handle when no poster path given
         }
         return imageView;
     }
