@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
-    android:padding="@dimen/frame_layout_padding">
+    android:background="@color/colorSecondary">
 
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_movies"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="@dimen/frame_layout_padding"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    <!--TODO position progressbar correctly-->
     <ProgressBar
         android:id="@+id/pb_load_movie"
         android:layout_width="@dimen/progressbar_dimen"
         android:layout_height="@dimen/progressbar_dimen"
+        android:layout_below="@+id/toolbar_movies"
+        android:layout_centerInParent="true"
         android:visibility="invisible" />
     <GridView
         android:id="@+id/movie_grid_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_movies"
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"

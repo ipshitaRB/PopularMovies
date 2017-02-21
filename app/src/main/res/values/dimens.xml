@@ -4,4 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="frame_layout_padding">16dp</dimen>
     <dimen name="progressbar_dimen">40dp</dimen>
+    <dimen name="article_titles">20sp</dimen>
+    <dimen name="md_keylines">16dp</dimen>
+    <dimen name="article_keylines">72dp</dimen>
+    <dimen name="app_bar_height">256dp</dimen>
 </resources>

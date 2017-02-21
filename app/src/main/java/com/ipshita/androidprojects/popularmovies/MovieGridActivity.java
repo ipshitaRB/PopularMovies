@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,7 +53,8 @@ public class MovieGridActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_grid);
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_movies);
+        setSupportActionBar(toolbar);
         loadMoviesProgressBar = (ProgressBar) findViewById(R.id.pb_load_movie);
 
         movieGridView = (GridView) findViewById(R.id.movie_grid_view);
@@ -62,8 +64,8 @@ public class MovieGridActivity extends AppCompatActivity {
         movieList = new ArrayList<>();
 
         if (savedInstanceState == null ||
-                !savedInstanceState.containsKey(getString(R.string.movie_parcel_key))
-                || !savedInstanceState.containsKey(getString(R.string.sorted_key))) {
+                (!savedInstanceState.containsKey(getString(R.string.movie_parcel_key))
+                        && !savedInstanceState.containsKey(getString(R.string.sorted_key)))) {
             movieList.clear();
             if (NetworkUtils.isNetworkAvailable(context)) {
 
@@ -72,6 +74,7 @@ public class MovieGridActivity extends AppCompatActivity {
                 Toast.makeText(context, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         } else {
+            movieList.clear();
             movieList = savedInstanceState.getParcelableArrayList(getString(R.string.movie_parcel_key));
             currentSortType = SortBy.whichSortBy(savedInstanceState.getString(getString(R.string.sorted_key)));
         }
@@ -169,7 +172,7 @@ public class MovieGridActivity extends AppCompatActivity {
         new FetchMovieTask().execute(sortPreference);
     }
 
-    // TODO: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
+    // completed: 17-02-2017 Create FetchMovieTask,, which extends AsyncTask to fetch movie data from moviedb api
     public class FetchMovieTask extends AsyncTask<SortBy, Void, List<Movie>> {
         @Override
         protected void onPreExecute() {
@@ -199,8 +202,8 @@ public class MovieGridActivity extends AppCompatActivity {
 
         }
 
-        // TODO: 17-02-2017 check internet connection
-// TODO: 17-02-2017 show progressbar in case intenet is slow
+        // completed: 17-02-2017 check internet connection
+// completed: 17-02-2017 show progressbar in case intenet is slow
         @Override
         protected void onPostExecute(List<Movie> movies) {
             super.onPostExecute(movies);
@@ -216,8 +219,7 @@ public class MovieGridActivity extends AppCompatActivity {
             } else {
                 movieList.clear();
                 movieList.addAll(movies);
-                movieAdapter.addAll(movieList);
-
+                movieAdapter.notifyDataSetChanged();
 
                 // completed: 19-02-2017 do something about the new itemclicklisteners every time data is loaded :|
 

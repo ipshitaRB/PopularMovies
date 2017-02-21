@@ -1,7 +1,9 @@
 package com.ipshita.androidprojects.popularmovies.adapters;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,6 +40,7 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
             return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,7 +51,7 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(4, 4, 4, 0);
+            imageView.setPadding(16, 16, 16, 16);
 
         } else {
             imageView = (ImageView) convertView;
