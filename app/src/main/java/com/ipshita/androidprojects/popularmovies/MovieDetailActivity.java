@@ -72,11 +72,35 @@ public class MovieDetailActivity extends AppCompatActivity {
                 // TODO: 19-02-2017 handle when no poster path given
                 Picasso.with(context).load("http://image.tmdb.org/t/p/original/"
                         + clickedMovie.getPosterPath()).into(posterImageView);
-            // TODO: 20-02-2017 if string empty set appropriate message 
-            collapsingToolbar.setTitle(clickedMovie.getTitle());
-            synopsisTextView.setText(clickedMovie.getSynopsis());
-            ratingTextView.setText(String.valueOf(clickedMovie.getAverageVote()));
-            releaseDateTextView.setText(clickedMovie.getReleaseDate());
+            // Done: 20-02-2017 if string empty set appropriate message
+            String title = clickedMovie.getTitle();
+            if (!title.isEmpty()) {
+                collapsingToolbar.setTitle(title);
+            } else {
+                collapsingToolbar.setTitle(getString(R.string.no_title_found));
+            }
+
+            String synopsis = clickedMovie.getSynopsis();
+            if (!synopsis.isEmpty()) {
+                synopsisTextView.setText(synopsis);
+            } else {
+                synopsisTextView.setText(getString(R.string.no_synopsis_found));
+            }
+
+            String rating = String.valueOf(clickedMovie.getAverageVote());
+            if (!rating.isEmpty()) {
+                ratingTextView.setText(rating);
+            } else {
+                ratingTextView.setText(getString(R.string.no_rating_found));
+            }
+
+            String releaseDate = clickedMovie.getReleaseDate();
+            if (!releaseDate.isEmpty()) {
+
+                releaseDateTextView.setText(releaseDate);
+            } else {
+                releaseDateTextView.setText(getString(R.string.no_release_date_found));
+            }
 
         } else {
             collapsingToolbar.setTitle(getString(R.string.no_result_found));
