@@ -26,8 +26,7 @@ public final class NetworkUtils {
 
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
-    private static final String MOVIE_URL =
-            "https://api.themoviedb.org/3/discover/movie";
+    private static final String MOVIE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String PICASSO_URL = "http://image.tmdb.org/t/p/";
 
 
@@ -41,8 +40,9 @@ public final class NetworkUtils {
     public static URL buildDiscoverMoviesBySortUrl(SortBy sortByQuery) {
         // COMPLETED (1) Fix this method to return the URL used to query Open Weather Map's API
         Uri builtUri = Uri.parse(MOVIE_URL).buildUpon()
+                .appendPath(sortByQuery.toString())
                 .appendQueryParameter(API_KEY_PARAM, com.ipshita.androidprojects.popularmovies.BuildConfig.MOVIE_DB_API_KEY)
-                .appendQueryParameter(SORT_BY_PARAM, sortByQuery.toString())
+
                 .build();
 
         URL url = null;

@@ -8,8 +8,8 @@ package com.ipshita.androidprojects.popularmovies.utilities;
 
 public enum SortBy {
 
-    POPULARITY("popularity.desc"),
-    RATING("vote_average.desc");
+    POPULARITY("popular"),
+    RATING("top_rated");
 
 
     private final String value;
