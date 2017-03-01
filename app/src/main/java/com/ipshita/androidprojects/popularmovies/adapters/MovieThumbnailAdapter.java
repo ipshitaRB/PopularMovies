@@ -23,6 +23,7 @@ import java.util.List;
 
 public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
 
+    private static final int LAYOUT_PARAM_LENGTH = 500;
     private Context mContext;
     private List<Movie> movieList;
 
@@ -49,9 +50,10 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(500, 500));
+            imageView.setLayoutParams(new GridView.LayoutParams(LAYOUT_PARAM_LENGTH, LAYOUT_PARAM_LENGTH));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(16, 16, 16, 16);
+            int paddingDimension = (int) getContext().getResources().getDimension(R.dimen.image_view_padding);
+            imageView.setPadding(paddingDimension, paddingDimension, paddingDimension, paddingDimension);
 
         } else {
             imageView = (ImageView) convertView;
@@ -59,8 +61,12 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
         if (null != movieList && !movieList.isEmpty()) {
             Movie movie = movieList.get(position);
             if (null != movie.getPosterPath() && !movie.getPosterPath().isEmpty())
-                Picasso.with(getContext()).load("http://image.tmdb.org/t/p/w185/"
-                        + movie.getPosterPath()).into(imageView);
+                Picasso.with(getContext())
+                        .load("http://image.tmdb.org/t/p/w185/"
+                                + movie.getPosterPath())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher).
+                        into(imageView);
 
             else {
                 imageView.setContentDescription(getContext().getString(R.string.no_poster_image_found));
@@ -68,7 +74,7 @@ public class MovieThumbnailAdapter extends ArrayAdapter<Movie> {
             //imageView.setImageResource(movieList.);
 
             // TODO: 19-02-2017 build url and use
-            // TODO: 19-02-2017 handle when no poster path given
+            // done: 19-02-2017 handle when no poster path given
         }
         return imageView;
     }

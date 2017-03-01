@@ -5,7 +5,7 @@ package com.ipshita.androidprojects.popularmovies.utilities;
  * It is used in {@link NetworkUtils} build url method
  * Created by Ipshita on 18-02-2017.
  */
-
+// TODO: 01-03-2017 enum costly. needs to be replaced 
 public enum SortBy {
 
     POPULARITY("popular"),
